@@ -1,81 +1,83 @@
-# AirlineTicketPricePrediction from End to End
-This machine learning project aims to do 2 main things separately:
-1. Predicting the airline ticket price (regression problem).
-2. Classifying the ticket price range into 4 categories: cheap, moderate, expensive, very expensive.
+# ✈️ Airline Ticket Price Prediction & Classification
 
-These two parts rely on 10 features: date, airline, ch code (airline code), num code, time taken, stop, arrival time, type, route.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PowerBI](https://img.shields.io/badge/PowerBI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-1296DB?style=for-the-badge&logo=xgboost&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 
-Data format: comma separated values file. 
-# Project Lifecycle
-1. Data Analysis
-2. Preprocessing
-3. Modeling
-4. Testing
-5. Models Analysis (not done yet)
-6. Deployment on heroku
+An end-to-end Machine Learning pipeline that solves two distinct problems using historical flight data:
+1. **Regression**: Accurately predicting the exact numeric ticket price.
+2. **Classification**: Categorizing the ticket price into 4 tiers (`Cheap`, `Moderate`, `Expensive`, `Very Expensive`).
 
+---
 
-# Tech Stack
-Programming Languages: Python 3.9, JavaScript
+## 📊 Project Lifecycle
 
-Markup Languages: HTML, CSS
+The workflow of this project spans across the entire data science lifecycle:
+1. **Data Analysis** (PowerBI)
+2. **Preprocessing & Feature Engineering** (Pandas, SciPy)
+3. **Modeling & Ensemble Learning** (Scikit-Learn, XGBoost, LightGBM)
+4. **Testing & Validation**
+5. **Web Deployment** (Flask, HTML, CSS, Bootstrap)
 
-Tools used: PowerBI
+---
 
-Frameworks: Bootstrap
+## 🛠️ Tech Stack
 
-Libraries used: NumPy, pandas, dataprep, matplotlib, scipy, seabron, TensorFlow, xgboost, sklearn, joblib, flask.
+- **Data Science**: Python, NumPy, Pandas, DataPrep, SciPy, Matplotlib, Seaborn
+- **Machine Learning**: Scikit-Learn, XGBoost, LightGBM, TensorFlow, Joblib
+- **Business Intelligence**: Power BI
+- **Web Deployment**: Flask, JavaScript, HTML, CSS, Bootstrap
 
-# Data Analysis:
+---
 
-Analysis was done using Power BI, answering 20 questions about the data
-![analysis report ](https://user-images.githubusercontent.com/76780379/170844979-5b42173d-e2a4-40fd-859a-5c16e60694c2.jpg)
-# Preprocessing:
+## 🔍 Phase 1: Data Analysis & Preprocessing
 
-1. Due to the presence of the date feature, the data was handled as a time series forecasting problem
-2. Data was sorted (mergesort) according to month, day, flight departure hour, and flight departure minute
-to prevent data leakage when splittling the data into the training and validation set.
-3. Features extracted: weekday of flight, flight day, flight month, and distance between the source and destination cities.
-4. Feature balance applied to airline as some categories had relatively low frequency
-5. Outlier detection using the interquartile range on the label (price)
-6. Feature engineering applied to the other features
-7. Feature selection using the p value
-8. Data transformation using the discrete cosine transform as this is a time series data (we suspected that the data may have been periodic)
-![time series data](https://user-images.githubusercontent.com/76780379/170845001-c72271a3-f6b0-4886-bdf2-d2d2e7058622.jpg)
-Multiple encoders were used and this resulted in 3 different dataset and training was done on each one of them separatly
-# Modeling :
+### Analysis
+Extensive Exploratory Data Analysis (EDA) was performed using Power BI to answer 20 core business questions regarding flight routes, timing, and pricing trends.
 
-10 models were tried in Regression:
-1. eXtreme Gradient Boosting Regressor
-2. Poisson Regressor
-3. Histogram Gradient Boosting Regressor
-4. Linear Regression
-5. Light Gradient Boosting Machine Regressor
-6. Gradient Boosting Regressor
-7. Extra Tree Regressor 
-8. Bagging Regressor
-9. Decision Tree Regressor
-10. Random Forest 
-11. A bagging ensemble learning model (simple averaging) made with: HistGradientBoostingRegressor,LGBMRegressor, ExtraTreesRegressor, BaggingRegressor, RandomForestRegressor 
+![Power BI Analysis Report](https://user-images.githubusercontent.com/76780379/170844979-5b42173d-e2a4-40fd-859a-5c16e60694c2.jpg)
 
-The ensemble model and random forest got the 2 best r2 score in the regression testing set
+### Preprocessing Pipeline
+Because the dataset relies heavily on dates, the problem was treated as a **Time Series Forecasting** challenge:
+1. **Time-Series Sorting**: Data was sorted (mergesort) by month, day, and time to prevent temporal data leakage during the train/validation split.
+2. **Feature Engineering**: Extracted weekday, flight day, flight month, and calculated distances between source/destination.
+3. **Outlier Detection**: Utilized Interquartile Range (IQR) on the target variable (Price).
+4. **Data Transformation**: Applied Discrete Cosine Transform (DCT) to capture underlying periodic patterns in the flight schedule.
+5. **Encoding**: Evaluated multiple categorical encoders, resulting in 3 distinct datasets for parallel training.
 
-Ensemble model r2 score: 0.982
+![Time Series Data](https://user-images.githubusercontent.com/76780379/170845001-c72271a3-f6b0-4886-bdf2-d2d2e7058622.jpg)
 
-Random Forest r2 score: 0.980
+---
 
-![random forest mse](https://user-images.githubusercontent.com/76780379/172643425-76dfa607-f2ab-40cb-9249-55b336ab592d.jpg)
+## 🧠 Phase 2: Modeling
 
-9 models were tried in classification:
-1. Ada Boost
-2. Gradient Boosting Classifier
-3. Bagging Classifier
-4. Random Forest    
-5. eXtreme Gradient Boosting Classifier
-6. Decision Tree Classifier
-7. Histogram Gradient Boosting Classifier     
-8. Extra Tree Classifier 
-9. Ensemble Stacking model that consists of RF, bagging classifier , extra tree classifier (the best performing models) 
+Over 19 different algorithms were trained and evaluated across the Regression and Classification tasks.
 
-# Deployment:
-Deployment was done using HTML, CSS, Javascript, bootstrap for the interface and the backened was made by Flask.
+### Regression (Exact Price Prediction)
+10 models were evaluated, including XGBoost, LightGBM, Random Forest, and Decision Trees. 
+- 🏆 **Best Performer**: A custom Bagging Ensemble (averaging HistGradientBoosting, LGBM, ExtraTrees, BaggingRegressor, and RandomForest) achieved an **R² score of 0.982**.
+- 🥈 **Runner Up**: Random Forest Regressor (**R² score of 0.980**).
+
+![Random Forest MSE](https://user-images.githubusercontent.com/76780379/172643425-76dfa607-f2ab-40cb-9249-55b336ab592d.jpg)
+
+### Classification (Price Tier Prediction)
+9 models were evaluated to classify tickets into 4 price tiers.
+- 🏆 **Best Performer**: An Ensemble Stacking model combining Random Forest, Bagging Classifier, and Extra Trees Classifier.
+
+---
+
+## 🌐 Phase 3: Deployment
+
+The final trained models were serialized (via `joblib`) and deployed through a lightweight web application.
+- **Backend**: Python / Flask API
+- **Frontend**: Responsive UI built with HTML, CSS, JavaScript, and Bootstrap.
+
+---
+
+## 👨‍💻 Author
+
+**Ananya Raj Wansh**
+- [GitHub](https://github.com/ananyarajwansh)
+- [LinkedIn](https://www.linkedin.com/in/ananya-raj-wansh-758689293/)
